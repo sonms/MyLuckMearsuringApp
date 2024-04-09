@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -45,6 +46,12 @@ android {
 dependencies {
     //룰렛
     implementation 'com.github.mmoamenn:LuckyWheel_Android:0.3.0'
+    //glide
+    implementation("com.github.bumptech.glide:glide:4.14.2")
+    implementation 'androidx.preference:preference:1.2.1'
+    kapt("com.github.bumptech.glide:compiler:4.14.2")
+    //lottie
+    implementation 'com.airbnb.android:lottie:3.0.7'
 
 
     implementation 'androidx.core:core-ktx:1.7.0'
