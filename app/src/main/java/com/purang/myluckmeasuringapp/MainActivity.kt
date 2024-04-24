@@ -1,8 +1,16 @@
 package com.purang.myluckmeasuringapp
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewTreeObserver
+import android.view.animation.AnticipateInterpolator
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.purang.myluckmeasuringapp.bottom_navigation.AccountFragment
@@ -10,6 +18,10 @@ import com.purang.myluckmeasuringapp.bottom_navigation.HomeFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.MemorialsFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.StatisticsFragment
 import com.purang.myluckmeasuringapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding : ActivityMainBinding
@@ -19,11 +31,63 @@ class MainActivity : AppCompatActivity() {
     private val TAG_MEMORIALS = "memorials_fragment"
     private val TAG_ACCOUNT= "account_fragment"
 
+    private var isReady = false
     override fun onCreate(savedInstanceState: Bundle?) {
+        initSplashScreen()
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
+        setFragment(TAG_HOME, HomeFragment())
         initNavigationBar()
+    }
+
+    private fun initData() {
+        // 별도의 데이터 처리가 없기 때문에 3초의 딜레이를 줌.
+        // 선행되어야 하는 작업이 있는 경우, 이곳에서 처리 후 isReady를 변경.
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(1000)
+        }
+        isReady = true
+    }
+    private fun initSplashScreen() {
+        initData()
+        val splashScreen = installSplashScreen()
+        val content: View = findViewById(android.R.id.content)
+        // SplashScreen이 생성되고 그려질 때 계속해서 호출된다.
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    return if (isReady) {
+                        // 3초 후 Splash Screen 제거
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        // The content is not ready
+                        false
+                    }
+                }
+            }
+        )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener {splashScreenView ->
+                val animScaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 8f)
+                val animScaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 8f)
+                val animAlpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1f, 0f)
+
+                ObjectAnimator.ofPropertyValuesHolder(
+                    splashScreenView.iconView,
+                    animAlpha,
+                    animScaleX,
+                    animScaleY
+                ).run {
+                    interpolator = AnticipateInterpolator()
+                    duration = 300L
+                    doOnEnd { splashScreenView.remove() }
+                    start()
+                }
+            }
+        }
     }
 
     private fun initNavigationBar() {

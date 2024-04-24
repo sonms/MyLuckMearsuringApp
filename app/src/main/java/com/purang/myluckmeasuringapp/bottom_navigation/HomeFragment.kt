@@ -1,11 +1,14 @@
 package com.purang.myluckmeasuringapp.bottom_navigation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.purang.myluckmeasuringapp.R
+import com.purang.myluckmeasuringapp.databinding.FragmentHomeBinding
+import com.purang.myluckmeasuringapp.game_activity.DiceActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +25,8 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var binding : FragmentHomeBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,8 +39,19 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding?.homeStartBtn?.setOnClickListener {
+            val intent = Intent(requireActivity(), DiceActivity::class.java)
+            startActivity(intent)
+        }
+
+        return binding?.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding = null
     }
 
     companion object {
