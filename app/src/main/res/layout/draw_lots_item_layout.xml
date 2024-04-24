@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/draw_item_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_icon"
+            />
+
+        <TextView
+            android:id="@+id/draw_item_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/draw_item_iv"
+            android:layout_alignEnd="@+id/draw_item_iv"
+            android:layout_alignStart="@+id/draw_item_iv"
+            android:layout_alignTop="@+id/draw_item_iv"
+            android:text="1"
+            android:textSize="16sp"
+            android:fontFamily="@font/pretendard_bold"
+            android:textColor="@color/black"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

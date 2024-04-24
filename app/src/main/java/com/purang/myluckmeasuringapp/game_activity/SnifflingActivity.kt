@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.Toast
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.ActivitySnifflingBinding
 import kotlin.random.Random
@@ -73,10 +74,12 @@ class SnifflingActivity : AppCompatActivity() {
 
                     binding.snifflingResultTv.text = random
                     binding.snifflingResultTv.visibility = View.VISIBLE
-                    gameResult = if (random.split(" ").last() == "홀") {
-                        "win"
+                     if (random.split(" ").last() == "홀") {
+                         gameResult = "win"
+                         Toast.makeText(this@SnifflingActivity, "정답!!!", Toast.LENGTH_SHORT).show()
                     } else {
-                        "lose"
+                         gameResult ="lose"
+                         Toast.makeText(this@SnifflingActivity, "땡~!", Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -115,10 +118,12 @@ class SnifflingActivity : AppCompatActivity() {
 
                     binding.snifflingResultTv.text = random
                     binding.snifflingResultTv.visibility = View.VISIBLE
-                    gameResult = if (random.split(" ").last() == "짝") {
-                        "win"
+                    if (random.split(" ").last() == "짝") {
+                        gameResult = "win"
+                        Toast.makeText(this@SnifflingActivity, "정답!!!", Toast.LENGTH_SHORT).show()
                     } else {
-                        "lose"
+                        gameResult ="lose"
+                        Toast.makeText(this@SnifflingActivity, "땡~!", Toast.LENGTH_SHORT).show()
                     }
                 }
 
