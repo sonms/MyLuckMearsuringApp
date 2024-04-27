@@ -1,10 +1,12 @@
 package com.purang.myluckmeasuringapp.adapter
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.init
@@ -70,6 +72,21 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position], position)
+
+        holder.itemView.setOnClickListener {
+            if (items[position].content == "win") {
+                val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(context!! , R.color.winning_color1)) //승인
+                // 배경색 변경
+                holder.itemView.backgroundTintList = colorStateList
+
+                notifyDataSetChanged()
+            } else {
+                val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(context!! , R.color.purang_gray7)) //승인
+                // 배경색 변경
+                holder.itemView.backgroundTintList = colorStateList
+                notifyDataSetChanged()
+            }
+        }
     }
 
     override fun getItemCount() = items.size

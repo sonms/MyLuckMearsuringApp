@@ -29,14 +29,13 @@ class DrawLotsActivity : AppCompatActivity() {
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
 
-        initAdapter()
-
         binding.bottomBtn.setOnClickListener {
             val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_rv_anim)
             // 애니메이션 적용
             binding.nested.startAnimation(fadeInAnimation)
             binding.drawRv.startAnimation(fadeInAnimation)
             setData()
+            initAdapter()
         }
 
         binding.bottomNextBtn.setOnClickListener {
@@ -66,7 +65,9 @@ class DrawLotsActivity : AppCompatActivity() {
 
                 binding.bottomNextBtn.visibility = View.VISIBLE
                 binding.bottomBtn.visibility = View.GONE
+                binding.drawRv.isClickable = false
 
+                //binding.drawRv.remo
             }
         })
     }

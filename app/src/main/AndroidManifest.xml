@@ -12,6 +12,9 @@
         android:theme="@style/Theme.MyLuckMeasuringApp"
         tools:targetApi="31">
         <activity
+            android:name=".game_activity.ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".game_activity.JellyUpgradeActivity"
             android:exported="false" />
         <activity

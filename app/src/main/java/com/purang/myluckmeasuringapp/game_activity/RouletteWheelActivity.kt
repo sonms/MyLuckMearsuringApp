@@ -34,10 +34,10 @@ class RouletteWheelActivity : AppCompatActivity() {
         //룰렛이 다 돌아갔을 때
         binding.wheel.setLuckyWheelReachTheTarget {
             if (point == randomIdx) {
-                gameResult = "${randomIdx}개의 원판에서 당첨!!"
+                gameResult = "win"
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
             } else {
-                gameResult = "${point}개의 원판에서 꽝.."
+                gameResult = "lose"
                 Toast.makeText(this@RouletteWheelActivity, "꽝...ㅠㅠ", Toast.LENGTH_SHORT).show()
             }
 
@@ -47,7 +47,7 @@ class RouletteWheelActivity : AppCompatActivity() {
 
         //시작
         binding.wheelBtn.setOnClickListener {
-            point = Random.nextInt(12)+2
+            point = Random.nextInt(10)+2
             binding.wheel.rotateWheelTo(point)
         }
 
@@ -63,7 +63,7 @@ class RouletteWheelActivity : AppCompatActivity() {
 
     private fun setWheelData() {
         //val winningTargetIdx = Random.nextInt(15)+1 //
-        val idx = (Random.nextInt(12)+2)
+        val idx = (Random.nextInt(10)+2)
         randomIdx = if (idx % 2 != 0) {//2~16 총 룰렛갯수 + 당첨 룰렛 idx + 짝수만
             idx + 1
         } else {

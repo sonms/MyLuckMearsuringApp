@@ -5,9 +5,9 @@
     android:repeatCount="infinite">
 
     <rotate
-        android:duration="1000"
-        android:fromDegrees="-10"
-        android:toDegrees="10"
+        android:duration="3000"
+        android:fromDegrees="0"
+        android:toDegrees="30"
         android:pivotX="50%"
         android:pivotY="50%" />
 </set>

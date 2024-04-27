@@ -33,21 +33,22 @@ class SnifflingActivity : AppCompatActivity() {
             val imageView = binding.cupIconIv
             val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.anim)
             imageView.startAnimation(shakeAnimation)
+            binding.bottomBtnLl.visibility = View.GONE
+            binding.selectBtnLl.visibility = View.VISIBLE
             //val result = randomNum()
-            shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
+            /*shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onAnimationEnd(p0: Animation?) {
-                    binding.bottomBtnLl.visibility = View.GONE
-                    binding.selectBtnLl.visibility = View.VISIBLE
+
                 }
 
                 override fun onAnimationRepeat(p0: Animation?) {
-                    TODO("Not yet implemented")
+                    //TODO("Not yet implemented")
                 }
-            })
+            })*/
         }
         //홀
         binding.select1Btn.setOnClickListener {
