@@ -46,15 +46,12 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
     inner class ViewHolder(binding: DrawLotsItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DrawLotsData, position: Int) {
             if (item.number % 2 != 0) {
-                Glide.with(context!!)
-                    .load(R.drawable.note_icon)
-                    .into(binding.drawItemIv)
+                binding.drawItemIv.setImageResource(R.drawable.note_icon)
                 binding.drawItemTv.text = item.number.toString()
             } else {
-                Glide.with(context!!)
-                    .load(R.drawable.note2_icon)
-                    .into(binding.drawItemIv)
+                binding.drawItemIv.setImageResource(R.drawable.note2_icon)
                 binding.drawItemTv.text = item.number.toString()
+                binding.drawItemTv.setTextColor(ContextCompat.getColor(context!! ,R.color.purang_gray3))
             }
         }
     }
@@ -66,7 +63,7 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
         binding = NotificationItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         * */
         context = parent.context
-        val binding = DrawLotsItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = DrawLotsItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

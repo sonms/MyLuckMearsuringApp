@@ -20,7 +20,7 @@ import kotlin.random.Random
 class RouletteWheelActivity : AppCompatActivity() {
     private lateinit var binding : ActivityRouletteWheelBinding
     private val wheelData : MutableList<WheelItem> = ArrayList()//= ArrayList<com.bluehomestudio.luckywheel.WheelItem>()
-    private var randomIdx = -1 //1~15 총 룰렛갯수 + 당첨 룰렛 idx
+    private var randomIdx = -1 //2~12 총 룰렛갯수 + 당첨 룰렛 idx
     private var point = -1
     private var gameResult = ""
     private var preGameResult = ""
@@ -33,6 +33,7 @@ class RouletteWheelActivity : AppCompatActivity() {
 
         //룰렛이 다 돌아갔을 때
         binding.wheel.setLuckyWheelReachTheTarget {
+            Log.e("point", point.toString())
             if (point == randomIdx) {
                 gameResult = "win"
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
@@ -47,7 +48,11 @@ class RouletteWheelActivity : AppCompatActivity() {
 
         //시작
         binding.wheelBtn.setOnClickListener {
-            point = Random.nextInt(10)+2
+            val tempPoint = Random.nextInt(randomIdx)+1
+
+            point = tempPoint
+            Log.e("rotate", point.toString())
+            //대상설정
             binding.wheel.rotateWheelTo(point)
         }
 
@@ -64,7 +69,7 @@ class RouletteWheelActivity : AppCompatActivity() {
     private fun setWheelData() {
         //val winningTargetIdx = Random.nextInt(15)+1 //
         val idx = (Random.nextInt(10)+2)
-        randomIdx = if (idx % 2 != 0) {//2~16 총 룰렛갯수 + 당첨 룰렛 idx + 짝수만
+        randomIdx = if (idx % 2 != 0) {//2~12 총 룰렛갯수 + 당첨 룰렛 idx + 짝수만
             idx + 1
         } else {
             idx

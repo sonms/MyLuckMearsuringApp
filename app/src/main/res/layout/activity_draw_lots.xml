@@ -24,6 +24,10 @@
         android:id="@+id/nested"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_btn_ll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3">
@@ -33,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:splitMotionEvents="false"
-            android:alpha="0.0"
             tools:listitem="@layout/draw_lots_item_layout" />
     </androidx.core.widget.NestedScrollView>
 
@@ -41,6 +44,8 @@
         android:id="@+id/bottom_btn_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="visible"

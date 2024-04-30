@@ -4,6 +4,11 @@ plugins {
     id 'kotlin-kapt'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def applicationKey = properties.getProperty('application_id')
+
+
 android {
     namespace 'com.purang.myluckmeasuringapp'
     compileSdk 34
@@ -15,6 +20,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+
+        manifestPlaceholders = [applicationKey: applicationKey]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,7 +62,8 @@ dependencies {
 
     //splashScreen
     implementation 'androidx.core:core-splashscreen:1.0.0-alpha01'
-
+    //admob
+    implementation 'com.google.android.gms:play-services-ads:23.0.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

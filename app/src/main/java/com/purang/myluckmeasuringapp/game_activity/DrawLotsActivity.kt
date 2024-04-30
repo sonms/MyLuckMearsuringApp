@@ -29,13 +29,16 @@ class DrawLotsActivity : AppCompatActivity() {
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
 
+        initAdapter()
+
         binding.bottomBtn.setOnClickListener {
             val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_rv_anim)
             // 애니메이션 적용
             binding.nested.startAnimation(fadeInAnimation)
             binding.drawRv.startAnimation(fadeInAnimation)
-            setData()
-            initAdapter()
+            binding.nested.visibility = View.VISIBLE
+            /*setData()
+            initAdapter()*/
         }
 
         binding.bottomNextBtn.setOnClickListener {
@@ -45,6 +48,28 @@ class DrawLotsActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun setData() {
+        val random = Random.nextInt(20)
+        itemData.clear()
+        for (i in 1..20) {
+            if (i == random) {
+                itemData.add(DrawLotsData(i, "win"))
+            } else {
+                itemData.add(DrawLotsData(i, "lose"))
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        setData()
+        adapter = DrawLotsAdapter(itemData)
+        binding.drawRv.adapter = adapter
+        binding.drawRv.setHasFixedSize(true)
+        binding.drawRv.layoutManager = gridLayoutManager
+        binding.nested.visibility = View.GONE
+
 
         adapter.setItemClickListener(object : DrawLotsAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, itemId: Int?) {
@@ -70,25 +95,5 @@ class DrawLotsActivity : AppCompatActivity() {
                 //binding.drawRv.remo
             }
         })
-    }
-
-    private fun setData() {
-        val random = Random.nextInt(20)
-        itemData.clear()
-        for (i in 1..20) {
-            if (i == random) {
-                itemData.add(DrawLotsData(i, "win"))
-            } else {
-                itemData.add(DrawLotsData(i, "lose"))
-            }
-        }
-    }
-
-    private fun initAdapter() {
-        setData()
-        adapter = DrawLotsAdapter(itemData)
-        binding.drawRv.adapter = adapter
-        binding.drawRv.setHasFixedSize(true)
-        binding.drawRv.layoutManager = gridLayoutManager
     }
 }

@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -33,22 +34,22 @@ class SnifflingActivity : AppCompatActivity() {
             val imageView = binding.cupIconIv
             val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.anim)
             imageView.startAnimation(shakeAnimation)
-            binding.bottomBtnLl.visibility = View.GONE
-            binding.selectBtnLl.visibility = View.VISIBLE
+
             //val result = randomNum()
-            /*shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
+            shakeAnimation.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationStart(p0: Animation?) {
 
                 }
 
                 override fun onAnimationEnd(p0: Animation?) {
-
+                    binding.bottomBtnLl.visibility = View.GONE
+                    binding.selectBtnLl.visibility = View.VISIBLE
                 }
 
                 override fun onAnimationRepeat(p0: Animation?) {
                     //TODO("Not yet implemented")
                 }
-            })*/
+            })
         }
         //홀
         binding.select1Btn.setOnClickListener {
@@ -69,6 +70,7 @@ class SnifflingActivity : AppCompatActivity() {
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
+                    binding.bottomBtnLl.visibility = View.VISIBLE
                     binding.bottomBtn.visibility = View.GONE
                     binding.bottomNextBtn.visibility = View.VISIBLE
                     binding.selectBtnLl.visibility = View.GONE
@@ -113,10 +115,6 @@ class SnifflingActivity : AppCompatActivity() {
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
-                    binding.bottomBtn.visibility = View.GONE
-                    binding.bottomNextBtn.visibility = View.VISIBLE
-                    binding.selectBtnLl.visibility = View.GONE
-
                     binding.snifflingResultTv.text = random
                     binding.snifflingResultTv.visibility = View.VISIBLE
                     if (random.split(" ").last() == "짝") {
@@ -126,6 +124,11 @@ class SnifflingActivity : AppCompatActivity() {
                         gameResult ="lose"
                         Toast.makeText(this@SnifflingActivity, "땡~!", Toast.LENGTH_SHORT).show()
                     }
+
+                    binding.bottomBtnLl.visibility = View.VISIBLE
+                    binding.bottomBtn.visibility = View.GONE
+                    binding.bottomNextBtn.visibility = View.VISIBLE
+                    binding.selectBtnLl.visibility = View.GONE
                 }
 
                 override fun onAnimationCancel(p0: Animator) {
@@ -156,6 +159,10 @@ class SnifflingActivity : AppCompatActivity() {
 
     private fun randomNum() {
         val randomNumber = Random.nextInt(100) + 1
+        val randomGenerator = Random(System.currentTimeMillis())
+        val result = randomGenerator.nextInt(1, 100)
+        Log.e("sniffling", randomNumber.toString())
+        Log.e("sniffling", result.toString())
         random = if (randomNumber % 2 == 0) {
             "$randomNumber 짝"
         } else {

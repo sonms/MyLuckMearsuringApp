@@ -13,6 +13,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.ads.MobileAds
 import com.purang.myluckmeasuringapp.bottom_navigation.AccountFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.HomeFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.MemorialsFragment
@@ -37,7 +38,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        setFragment(TAG_HOME, HomeFragment())
+
+        MobileAds.initialize(this) {} //광고 초기화화
+
+       setFragment(TAG_HOME, HomeFragment())
         initNavigationBar()
     }
 
