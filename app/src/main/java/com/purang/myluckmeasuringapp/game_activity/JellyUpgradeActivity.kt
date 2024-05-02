@@ -3,10 +3,14 @@ package com.purang.myluckmeasuringapp.game_activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.purang.myluckmeasuringapp.R
+import com.purang.myluckmeasuringapp.dao.MyViewModel
 import com.purang.myluckmeasuringapp.databinding.ActivityJellyUpgradeBinding
 import kotlin.random.Random
 
@@ -16,17 +20,34 @@ class JellyUpgradeActivity : AppCompatActivity() {
     private var gameResult = ""
     private var preGameResult = ""
     private var nextJelly = false
+    private lateinit var viewModel: MyViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJellyUpgradeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
+
+        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
+
+        // remainingChance LiveData를 관찰하여 값이 변경될 때마다 UI를 업데이트합니다.
+        viewModel.remainingChanceLiveData.observe(this, Observer { remainingChance ->
+            // UI 업데이트 로직을 여기에 작성합니다.
+            binding.remainingChanceNum.text = remainingChance.toString()
+
+            if (remainingChance <= 0) {
+                binding.bottomBtn.visibility = View.GONE
+                binding.bottomNextBtn.visibility = View.VISIBLE
+            }
+        })
+
+        // 초기 remainingChance 값을 설정합니다.
         initChance()
 
         binding.bottomBtn.setOnClickListener {
             if (remainingChance >= 1) {
                 probabilityCalculation()
                 remainingChance -= 1
+                binding.remainingChanceNum.text = remainingChance.toString()
             } else {
                 Toast.makeText(this@JellyUpgradeActivity, "남은 기회가 없습니다!", Toast.LENGTH_SHORT).show()
             }
@@ -41,18 +62,19 @@ class JellyUpgradeActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initChance() {
         remainingChance = Random.nextInt(20) + 1
         val randomGenerator = Random(System.currentTimeMillis())
         val result = randomGenerator.nextInt(1, 100)
         println(result)
-
+        viewModel.updateRemainingChance(remainingChance)
         binding.remainingChanceNum.text = remainingChance.toString()
     }
 
     private fun probabilityCalculation() {
         val nextRand = Random.nextInt(100) + 1
-
+        Log.e("jelly", nextRand.toString())
         if (nextRand == 1 && nextJelly) {
             if (remainingChance > 0) {
                 Toast.makeText(this@JellyUpgradeActivity, "강화 성공!!!", Toast.LENGTH_SHORT).show()
@@ -82,9 +104,5 @@ class JellyUpgradeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (remainingChance <= 0) {
-            binding.bottomBtn.visibility = View.GONE
-            binding.bottomNextBtn.visibility = View.VISIBLE
-        }
     }
 }

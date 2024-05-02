@@ -2,6 +2,8 @@ package com.purang.myluckmeasuringapp.adapter
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
     private var highlightText: String = ""
     private lateinit var binding : DrawLotsItemLayoutBinding
     private var context : Context? = null
+    private var selectPos = -1
 
     init {
         setHasStableIds(true)
@@ -53,6 +56,14 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
                 binding.drawItemTv.text = item.number.toString()
                 binding.drawItemTv.setTextColor(ContextCompat.getColor(context!! ,R.color.purang_gray3))
             }
+
+            /*itemView.setOnClickListener {
+                var beforePos = selectPos
+                selectPos = position
+
+                notifyItemChanged(beforePos)
+                notifyItemChanged(selectPos)
+            }*/
         }
     }
 
@@ -70,21 +81,31 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position], position)
 
+        val currentItem = items[position]
         holder.itemView.setOnClickListener {
-            if (items[position].content == "win") {
-                val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(context!! , R.color.winning_color1)) //승인
-                // 배경색 변경
-                holder.itemView.backgroundTintList = colorStateList
+            itemClickListener.onClick(it, holder.adapterPosition, items[holder.adapterPosition].number)
+            setSelection(position)
+            holder.itemView.isClickable = false
+        }
 
-                notifyDataSetChanged()
+        if (currentItem.isSelected) {
+            if (currentItem.content == "win") {
+                //val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(this@AccountSelectBankActivity , R.color.mio_gray_6)) //승인
+                holder.itemView.setBackgroundColor(Color.parseColor("#FFD700"))
             } else {
-                val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(context!! , R.color.purang_gray7)) //승인
-                // 배경색 변경
-                holder.itemView.backgroundTintList = colorStateList
-                notifyDataSetChanged()
+                holder.itemView.setBackgroundColor(Color.parseColor("#B7B7B7"))
             }
         }
     }
 
     override fun getItemCount() = items.size
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    private fun setSelection(pos : Int) {
+        items[pos].isSelected = !items[pos].isSelected
+        notifyItemChanged(pos)
+    }
 }

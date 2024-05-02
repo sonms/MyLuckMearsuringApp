@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -48,16 +49,35 @@ class DrawLotsActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        adapter.setItemClickListener(object : DrawLotsAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, itemId: Int?) {
+                val item = itemData[position]
+                Log.e("drawactivity", itemData[position].content)
+                if (item.content == "win") {
+                    gameResult = "win"
+                    Toast.makeText(this@DrawLotsActivity, "성공!!", Toast.LENGTH_SHORT).show()
+                } else {
+                    gameResult = "lose"
+                    Toast.makeText(this@DrawLotsActivity, "땡~", Toast.LENGTH_SHORT).show()
+                }
+                binding.bottomNextBtn.visibility = View.VISIBLE
+                binding.bottomBtn.visibility = View.GONE
+                binding.drawRv.isClickable = false
+
+                //binding.drawRv.remo
+            }
+        })
     }
 
     private fun setData() {
         val random = Random.nextInt(20)
         itemData.clear()
-        for (i in 1..20) {
+        for (i in 0..19) {
             if (i == random) {
-                itemData.add(DrawLotsData(i, "win"))
+                itemData.add(DrawLotsData(i+1, "win", false))
             } else {
-                itemData.add(DrawLotsData(i, "lose"))
+                itemData.add(DrawLotsData(i+1, "lose", false))
             }
         }
     }
@@ -69,31 +89,5 @@ class DrawLotsActivity : AppCompatActivity() {
         binding.drawRv.setHasFixedSize(true)
         binding.drawRv.layoutManager = gridLayoutManager
         binding.nested.visibility = View.GONE
-
-
-        adapter.setItemClickListener(object : DrawLotsAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, itemId: Int?) {
-                val item = itemData[position]
-                if (item.content == "win") {
-                    val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(this@DrawLotsActivity , R.color.winning_color1)) //승인
-                    // 배경색 변경
-                    view.backgroundTintList = colorStateList
-                    gameResult = "win"
-                    Toast.makeText(this@DrawLotsActivity, "성공!!", Toast.LENGTH_SHORT).show()
-                } else {
-                    val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(this@DrawLotsActivity , R.color.purang_gray7)) //승인
-                    // 배경색 변경
-                    view.backgroundTintList = colorStateList
-                    gameResult = "lose"
-                    Toast.makeText(this@DrawLotsActivity, "땡~", Toast.LENGTH_SHORT).show()
-                }
-
-                binding.bottomNextBtn.visibility = View.VISIBLE
-                binding.bottomBtn.visibility = View.GONE
-                binding.drawRv.isClickable = false
-
-                //binding.drawRv.remo
-            }
-        })
     }
 }
