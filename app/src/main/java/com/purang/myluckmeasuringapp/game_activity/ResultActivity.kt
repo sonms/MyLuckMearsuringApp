@@ -1,5 +1,6 @@
 package com.purang.myluckmeasuringapp.game_activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,7 +33,8 @@ class ResultActivity : AppCompatActivity() {
 
     private var preGameResult = ""
     private var resultData : GameResultEntity? = null
-
+    private val sharedPref = this.getSharedPreferences("saveData", Context.MODE_PRIVATE)
+    private var preNickName : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
@@ -41,6 +43,7 @@ class ResultActivity : AppCompatActivity() {
         db = ResultDatabase.getInstance(this@ResultActivity)
         initView()
         initAd()
+        preNickName = sharedPref.getString("saveNickname", "") ?: ""
 
         binding.bottomBtn.setOnClickListener {
             //data 저장도 여기서 Todo
@@ -98,7 +101,11 @@ class ResultActivity : AppCompatActivity() {
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
         val resultDataSet = preGameResult.split(" ").map { it.toString() }
         resultData = GameResultEntity(
-            userName = "user1",
+            userName = if (preNickName != null) {
+                preNickName!!
+            } else {
+                "유저1"
+            },
             gameDice = preGameResult[0].toString(),
             gameRoulette = preGameResult[1].toString(),
             gameSniffling = preGameResult[2].toString(),
