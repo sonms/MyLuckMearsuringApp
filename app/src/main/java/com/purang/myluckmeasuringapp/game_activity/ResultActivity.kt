@@ -1,15 +1,19 @@
 package com.purang.myluckmeasuringapp.game_activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -19,12 +23,13 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.purang.myluckmeasuringapp.MainActivity
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.dao.GameResultEntity
-import com.purang.myluckmeasuringapp.dao.ResultDao
 import com.purang.myluckmeasuringapp.database.ResultDatabase
 import com.purang.myluckmeasuringapp.databinding.ActivityResultBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding : ActivityResultBinding
@@ -33,17 +38,21 @@ class ResultActivity : AppCompatActivity() {
 
     private var preGameResult = ""
     private var resultData : GameResultEntity? = null
-    private val sharedPref = this.getSharedPreferences("saveData", Context.MODE_PRIVATE)
-    private var preNickName : String? = null
+    private var sharedPref : SharedPreferences? = null
+    private var preNickName : String = ""
+    private var gamePercentage = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPref = this.getSharedPreferences("saveData", Context.MODE_PRIVATE)
         preGameResult = intent.getStringExtra("result") as String
+        gamePercentage = intent.getStringExtra("percentage") as String
+
         db = ResultDatabase.getInstance(this@ResultActivity)
         initView()
         initAd()
-        preNickName = sharedPref.getString("saveNickname", "") ?: ""
+        preNickName = sharedPref?.getString("saveNickname", "") ?: ""
 
         binding.bottomBtn.setOnClickListener {
             //data 저장도 여기서 Todo
@@ -95,28 +104,36 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun initView() {
         //binding.resultLottie.playAnimation()
         //binding.resultLottie.cancelAnimation()
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
         val resultDataSet = preGameResult.split(" ").map { it.toString() }
+        Log.e("resultTest", resultDataSet.toString())
+        val mFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val mNow = System.currentTimeMillis();
+        val mDate = Date(mNow);
+        val date = mFormat.format(mDate);
+
         resultData = GameResultEntity(
-            userName = if (preNickName != null) {
-                preNickName!!
-            } else {
+            userName = preNickName.ifEmpty {
                 "유저1"
             },
             gameDice = preGameResult[0].toString(),
             gameRoulette = preGameResult[1].toString(),
             gameSniffling = preGameResult[2].toString(),
             gameDrawLots = preGameResult[3].toString(),
-            gameJelly = preGameResult[4].toString()
+            gameJelly = preGameResult[4].toString(),
+            gameDate = date.toString(),
+            gamePercentage = gamePercentage
         )
 
         // 페이드 아웃 애니메이션 설정
-        val fadeOutAnimation = AlphaAnimation(1.0f, 0.0f)
-        fadeOutAnimation.duration = 1000 // 애니메이션 지속 시간 설정 (밀리초)
+        val fadeOutAnimation = AlphaAnimation(0.0f, 1.0f)
+        fadeOutAnimation.duration = 3000 // 애니메이션 지속 시간 설정 (밀리초)
         fadeOutAnimation.fillAfter = true // 애니메이션 종료 후 상태 유지
+
         // 아이템 뷰에 애니메이션 적용
         for (i in resultDataSet.indices) {
             val itemLl = LinearLayout(this)
@@ -125,12 +142,14 @@ class ResultActivity : AppCompatActivity() {
 
             val params = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.WRAP_CONTENT,
             )
             itemLl.layoutParams = params
             itemLl.orientation = LinearLayout.HORIZONTAL
+            itemLl.gravity = Gravity.CENTER
 
             itemText.layoutParams = params
+            itemText.setTypeface(null, Typeface.BOLD)
             itemImage.layoutParams = params
             /*textView.layoutParams = params
 
@@ -199,6 +218,7 @@ class ResultActivity : AppCompatActivity() {
             }
             binding.resultLl.addView(itemLl)
         }
+
         binding.resultLottie.playAnimation()
 
         binding.bottomBtn.visibility = View.VISIBLE

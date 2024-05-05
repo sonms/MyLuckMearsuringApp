@@ -20,12 +20,14 @@ class SnifflingActivity : AppCompatActivity() {
     private var gameResult = ""
     private var preGameResult = ""
     private var random = ""
+    private var gamePercentage : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySnifflingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
+        gamePercentage = intent.getStringExtra("percentage") as String
 
         initUISet()
         randomNum()
@@ -142,8 +144,11 @@ class SnifflingActivity : AppCompatActivity() {
         }
 
         binding.bottomNextBtn.setOnClickListener {
+            gamePercentage = (gamePercentage.toDouble() * 0.5).toString()
+            val temp = "%.7f".format(gamePercentage.toDouble())
             val intent = Intent(this@SnifflingActivity, DrawLotsActivity::class.java).apply {
                 putExtra("result", "$preGameResult $gameResult")
+                putExtra("percentage", temp)
             }
             startActivity(intent)
             finish()

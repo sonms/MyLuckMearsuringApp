@@ -23,13 +23,14 @@ class DrawLotsActivity : AppCompatActivity() {
     private var itemData = ArrayList<DrawLotsData>()
     private var gridLayoutManager = GridLayoutManager(this@DrawLotsActivity, 4)
     private lateinit var adapter : DrawLotsAdapter
+    private var gamePercentage = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
-
+        gamePercentage = intent.getStringExtra("percentage") as String
         initAdapter()
 
         binding.bottomBtn.setOnClickListener {
@@ -43,8 +44,10 @@ class DrawLotsActivity : AppCompatActivity() {
         }
 
         binding.bottomNextBtn.setOnClickListener {
+            val temp = "%.7f".format(gamePercentage.toDouble())
             val intent = Intent(this@DrawLotsActivity, JellyUpgradeActivity::class.java).apply {
                 putExtra("result", "$preGameResult $gameResult")
+                putExtra("percentage", temp)
             }
             startActivity(intent)
             finish()
@@ -55,9 +58,11 @@ class DrawLotsActivity : AppCompatActivity() {
                 val item = itemData[position]
                 Log.e("drawactivity", itemData[position].content)
                 if (item.content == "win") {
+                    gamePercentage = (gamePercentage.toDouble() * (1.0 / itemData.size)).toString()
                     gameResult = "win"
                     Toast.makeText(this@DrawLotsActivity, "성공!!", Toast.LENGTH_SHORT).show()
                 } else {
+                    gamePercentage = (gamePercentage.toDouble() * ( (itemData.size - 1).toDouble() / itemData.size)).toString()
                     gameResult = "lose"
                     Toast.makeText(this@DrawLotsActivity, "땡~", Toast.LENGTH_SHORT).show()
                 }
@@ -65,6 +70,8 @@ class DrawLotsActivity : AppCompatActivity() {
                 binding.bottomBtn.visibility = View.GONE
                 binding.drawRv.isClickable = false
 
+                binding.drawRv.setOnClickListener(null)
+                adapter.setItemClickListener(null)
                 //binding.drawRv.remo
             }
         })

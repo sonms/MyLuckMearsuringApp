@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.purang.myluckmeasuringapp.R
+import com.purang.myluckmeasuringapp.database.ResultDatabase
 import com.purang.myluckmeasuringapp.databinding.FragmentAccountBinding
 import com.purang.myluckmeasuringapp.databinding.FragmentMemorialsBinding
 
@@ -25,6 +26,8 @@ class MemorialsFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding : FragmentMemorialsBinding
+    private var db: ResultDatabase? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -38,6 +41,9 @@ class MemorialsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMemorialsBinding.inflate(inflater, container, false)
+        db = ResultDatabase.getInstance(requireContext())
+
+
 
         return binding.root
     }

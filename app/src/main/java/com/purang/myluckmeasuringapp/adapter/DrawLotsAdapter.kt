@@ -32,9 +32,9 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
         fun onClick(view: View, position: Int, itemId: Int?)
     }
 
-    private lateinit var itemClickListener: ItemClickListener
+    private var itemClickListener: ItemClickListener? = null
 
-    fun setItemClickListener(itemClickListener: ItemClickListener) {
+    fun setItemClickListener(itemClickListener: ItemClickListener?) {
         this.itemClickListener = itemClickListener
     }
 
@@ -83,7 +83,7 @@ class DrawLotsAdapter(private var items: List<DrawLotsData>) : RecyclerView.Adap
 
         val currentItem = items[position]
         holder.itemView.setOnClickListener {
-            itemClickListener.onClick(it, holder.adapterPosition, items[holder.adapterPosition].number)
+            itemClickListener?.onClick(it, holder.adapterPosition, items[holder.adapterPosition].number)
             setSelection(position)
             holder.itemView.isClickable = false
         }

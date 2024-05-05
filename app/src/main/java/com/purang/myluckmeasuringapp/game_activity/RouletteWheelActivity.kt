@@ -24,20 +24,26 @@ class RouletteWheelActivity : AppCompatActivity() {
     private var point = -1
     private var gameResult = ""
     private var preGameResult = ""
+    private var gamePercentage = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRouletteWheelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         preGameResult = intent.getStringExtra("result") as String
+        gamePercentage = intent.getStringExtra("percentage") as String
         setWheelData() //룰렛판 세팅
 
         //룰렛이 다 돌아갔을 때
         binding.wheel.setLuckyWheelReachTheTarget {
             Log.e("point", point.toString())
             if (point == randomIdx) {
+                gamePercentage = (gamePercentage.toDouble() * (randomIdx.toDouble() / point.toDouble())).toString()
+                Log.e("gamePercentage", gamePercentage)
                 gameResult = "win"
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
             } else {
+                gamePercentage = (gamePercentage.toDouble() * ( (point - 1).toDouble() / point.toDouble())).toString()
+                Log.e("gamePercentage", gamePercentage)
                 gameResult = "lose"
                 Toast.makeText(this@RouletteWheelActivity, "꽝...ㅠㅠ", Toast.LENGTH_SHORT).show()
             }
@@ -57,8 +63,10 @@ class RouletteWheelActivity : AppCompatActivity() {
         }
 
         binding.wheelNextBtn.setOnClickListener {
+            val temp = "%.7f".format(gamePercentage.toDouble())
             val intent = Intent(this@RouletteWheelActivity, SnifflingActivity::class.java).apply {
                 putExtra("result", "$preGameResult $gameResult")
+                putExtra("percentage", temp)
             }
             startActivity(intent)
             finish()

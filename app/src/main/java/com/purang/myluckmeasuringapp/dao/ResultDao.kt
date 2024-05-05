@@ -1,10 +1,12 @@
 package com.purang.myluckmeasuringapp.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
-interface ResultDao {
+@Dao
+abstract interface ResultDao {
     @Query("SELECT * FROM table_result")
     fun getAll() : List<GameResultEntity>
 

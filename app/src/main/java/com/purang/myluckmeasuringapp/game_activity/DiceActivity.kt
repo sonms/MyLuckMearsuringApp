@@ -17,6 +17,7 @@ class DiceActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDiceBinding
     private val imageResources = ArrayList<Int>()
     private var gameResult = -1
+    private var gamePercentage = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +30,11 @@ class DiceActivity : AppCompatActivity() {
         }
 
         binding.diceNextBtn.setOnClickListener {
+            gamePercentage = (1.0/6.0)
+            val temp = "%.7f".format(gamePercentage.toDouble())
             val intent = Intent(this, RouletteWheelActivity::class.java).apply {
                 putExtra("result", gameResult.toString())
+                putExtra("percentage", temp)
             }
             startActivity(intent)
             finish()

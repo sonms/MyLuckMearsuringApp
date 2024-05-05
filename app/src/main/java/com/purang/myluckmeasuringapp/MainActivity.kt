@@ -14,6 +14,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.ads.MobileAds
+import com.purang.myluckmeasuringapp.Helper.ThemeHelper
 import com.purang.myluckmeasuringapp.bottom_navigation.AccountFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.HomeFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.MemorialsFragment
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         initSplashScreen()
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
+        ThemeHelper.applyTheme(this)
         setContentView(mBinding.root)
 
         MobileAds.initialize(this) {} //광고 초기화화
