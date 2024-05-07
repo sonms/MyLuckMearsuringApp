@@ -27,4 +27,21 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:navigationBarColor">@color/white</item>
     </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="background">@android:color/transparent</item>
+        <item name="android:textColor">@color/purang_gray10</item>
+    </style>
+
+    <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
+    </style>
+
+    <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/top_radius_dialog_shape</item>
+    </style>
 </resources>

@@ -1,6 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/white"
+    app:cardCornerRadius="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!--주사위-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="주사위 결과 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/memo_dice_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="6"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+
+
+        <!--룰렛-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="룰렛 결과 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/memo_roulette_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/winning_icon"
+                />
+        </LinearLayout>
+
+        <!--홀짝-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="홀짝 결과 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/memo_sniffling_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/winning_icon"
+                />
+        </LinearLayout>
+
+        <!--제비뽑기-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="제비뽑기 결과 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/memo_drawlots_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/winning_icon"
+                />
+        </LinearLayout>
+
+        <!--젤리-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="젤리강화 결과 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+            <ImageView
+                android:id="@+id/memo_jelly_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/gold_main_jelly"
+                />
+        </LinearLayout>
+
+        <!--성공확률, 날짜-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="결과 확률 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/memo_percentage_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="0.00012%"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="/"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                />
+
+            <TextView
+                android:id="@+id/memo_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="2024-04-12"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

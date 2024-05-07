@@ -1,12 +1,15 @@
 package com.purang.myluckmeasuringapp.bottom_navigation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.purang.myluckmeasuringapp.BottomAdFragment
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.FragmentStatisticsBinding
+import dalvik.system.ZipPathValidator.setCallback
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +41,8 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 

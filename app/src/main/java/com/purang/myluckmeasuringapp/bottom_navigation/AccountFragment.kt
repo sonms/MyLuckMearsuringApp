@@ -51,6 +51,7 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         val sharedPref = requireActivity().getSharedPreferences("saveData", Context.MODE_PRIVATE)
         preNickName = sharedPref.getString("saveNickname", "") ?: ""
+        Log.e("prenickname", preNickName.toString())
         if (preNickName != null) {
             binding.accountNickname.text = preNickName
         } else {
@@ -78,7 +79,7 @@ class AccountFragment : Fragment() {
                         putString("saveNickname", nickname)
                         apply() // 비동기적으로 데이터를 저장
                     }
-
+                    binding.accountNickname.text = nickname
                     ad.dismiss()
                 })
 

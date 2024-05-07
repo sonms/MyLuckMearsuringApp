@@ -104,6 +104,18 @@ class JellyUpgradeActivity : AppCompatActivity() {
                 //binding.drawItemTv.text = item.number.toString()
                 //nextJelly = true
                 gameResult = "gold"
+                /*gameResult = when (gameResult) {
+                    "gold" -> {
+                        "gold"
+                    }
+                    "silver" -> {
+                        "silver"
+                    }
+                    else -> {
+                        "bronze"
+                    }
+                }*/
+                viewModel.updateRemainingChance(0)
             }
         } else if (nextRand < 15 && !nextJelly) {
             if (remainingChance > 0) {
@@ -115,10 +127,31 @@ class JellyUpgradeActivity : AppCompatActivity() {
                 //binding.drawItemTv.text = item.number.toString()
                 nextJelly = true
                 gameResult = "silver"
+                /*gameResult = when (gameResult) {
+                    "gold" -> {
+                        "gold"
+                    }
+                    "silver" -> {
+                        "silver"
+                    }
+                    else -> {
+                        "bronze"
+                    }
+                }*/
             }
         }
         else {
-            gameResult = "bronze"
+            gameResult = when (gameResult) {
+                "gold" -> {
+                    "gold"
+                }
+                "silver" -> {
+                    "silver"
+                }
+                else -> {
+                    "bronze"
+                }
+            }
             Toast.makeText(this@JellyUpgradeActivity, "강화 실패!", Toast.LENGTH_SHORT).show()
         }
     }

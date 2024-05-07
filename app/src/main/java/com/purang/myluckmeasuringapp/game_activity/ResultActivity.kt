@@ -14,12 +14,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.purang.myluckmeasuringapp.MainActivity
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.dao.GameResultEntity
@@ -41,6 +40,7 @@ class ResultActivity : AppCompatActivity() {
     private var sharedPref : SharedPreferences? = null
     private var preNickName : String = ""
     private var gamePercentage = ""
+    lateinit var adLoader: AdLoader
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
@@ -48,10 +48,11 @@ class ResultActivity : AppCompatActivity() {
         sharedPref = this.getSharedPreferences("saveData", Context.MODE_PRIVATE)
         preGameResult = intent.getStringExtra("result") as String
         gamePercentage = intent.getStringExtra("percentage") as String
-
+        //MobileAds.initialize(this@ResultActivity)
         db = ResultDatabase.getInstance(this@ResultActivity)
         initView()
         initAd()
+        //initNativeAd()
         preNickName = sharedPref?.getString("saveNickname", "") ?: ""
 
         binding.bottomBtn.setOnClickListener {
@@ -220,11 +221,12 @@ class ResultActivity : AppCompatActivity() {
         }
 
         binding.resultLottie.playAnimation()
+        binding.resultAd.loadAd(AdRequest.Builder().build())
 
         binding.bottomBtn.visibility = View.VISIBLE
     }
 
-    private fun initAd() {
+    private fun initAd() { //전면광고
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this,
             "ca-app-pub-3940256099942544/1033173712",
@@ -237,11 +239,47 @@ class ResultActivity : AppCompatActivity() {
 
                 override fun onAdFailedToLoad(p0: LoadAdError) {
                     super.onAdFailedToLoad(p0)
-                    interstitialAd =null
+                    interstitialAd = null
                     Log.e("onAdFail", p0.message.toString())
                 }
             }
         )
     }
 
+    /*private fun initNativeAd() {
+        adLoader = AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110")
+            .forNativeAd { ad : NativeAd ->
+                // Show the ad.
+                if (adLoader.isLoading) {
+                    Log.e("loaderTest", "succcccccccccccddssssssssssssss")
+                    // The AdLoader is still loading ads.
+                    // Expect more adLoaded or onAdFailedToLoad callbacks.
+                    binding.resultAd2.setNativeAd(ad)
+                    if (isDestroyed) {
+                        ad.destroy()
+                        return@forNativeAd
+                    }
+                } else {
+                    // The AdLoader has finished loading ads.
+                    if (isDestroyed) {
+                        ad.destroy()
+                        return@forNativeAd
+                    }
+                }
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    // Handle the failure by logging, altering the UI, and so on.
+                    Log.e("nativeAdError", adError.message)
+                }
+            })
+            .withNativeAdOptions(
+                NativeAdOptions.Builder()
+                    // Methods in the NativeAdOptions.Builder class can be
+                    // used here to specify individual options settings.
+                    .build())
+            .build()
+
+        adLoader.loadAd(AdRequest.Builder().build())
+    }*/
 }

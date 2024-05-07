@@ -6,14 +6,18 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.purang.myluckmeasuringapp.Helper.ThemeHelper
 import com.purang.myluckmeasuringapp.bottom_navigation.AccountFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.HomeFragment
@@ -27,6 +31,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding : ActivityMainBinding
+    //private lateinit var bottomSheetDialog: BottomSheetDialog
+
 
     private val TAG_HOME = "home_fragment"
     private val TAG_STATISTICS = "statistics_fragment"
@@ -43,8 +49,20 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this) {} //광고 초기화화
 
-       setFragment(TAG_HOME, HomeFragment())
+        setFragment(TAG_HOME, HomeFragment())
         initNavigationBar()
+
+        val bottomSheet = BottomAdFragment()
+        bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+        bottomSheet.show(this.supportFragmentManager, bottomSheet.tag)
+        bottomSheet.apply {
+            setCallback(object : BottomAdFragment.OnSendFromBottomSheetDialog{
+                override fun sendValue(value: String) {
+                    Log.d("test", "BottomSheetDialog -> 액티비티로 전달된 값 : $value")
+                }
+            })
+        }
+
     }
 
     private fun initData() {

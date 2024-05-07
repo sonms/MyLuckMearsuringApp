@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.purang.myluckmeasuringapp.R
+import com.purang.myluckmeasuringapp.adapter.MemorialsAdapter
+import com.purang.myluckmeasuringapp.dao.GameResultEntity
 import com.purang.myluckmeasuringapp.database.ResultDatabase
 import com.purang.myluckmeasuringapp.databinding.FragmentAccountBinding
 import com.purang.myluckmeasuringapp.databinding.FragmentMemorialsBinding
@@ -26,6 +29,8 @@ class MemorialsFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding : FragmentMemorialsBinding
+    private var adapter : MemorialsAdapter? = null
+    private lateinit var gameData : List<GameResultEntity>
     private var db: ResultDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +44,22 @@ class MemorialsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentMemorialsBinding.inflate(inflater, container, false)
         db = ResultDatabase.getInstance(requireContext())
 
+        initRecyclerView()
 
 
         return binding.root
+    }
+
+    private fun initRecyclerView() {
+        gameData = db!!.resultDao().getAll()
+        adapter = MemorialsAdapter(gameData)
+        binding.memorialRv.adapter = adapter
+        binding.memorialRv.setHasFixedSize(true)
+        binding.memorialRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
     companion object {
