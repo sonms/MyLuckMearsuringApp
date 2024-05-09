@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.ads.AdRequest
 import com.purang.myluckmeasuringapp.BottomAdFragment
 import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
@@ -42,7 +43,7 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
-
+        binding.statisAd.loadAd(AdRequest.Builder().build())
         initDataSet()
 
         return binding.root

@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <!--테마-->
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/account_theme_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
             app:switchMinWidth="0dp"
             app:thumbTextPadding="24dp"
             app:track="@drawable/switch_track_selector" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <TextView
         android:id="@+id/account_license"
@@ -89,6 +89,6 @@
         android:fontFamily="@font/pretendard_bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_theme_ll" />
+        app:layout_constraintTop_toBottomOf="@+id/account_nickname_ll" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

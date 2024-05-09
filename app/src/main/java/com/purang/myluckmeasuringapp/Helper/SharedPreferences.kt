@@ -18,12 +18,12 @@ class SharedPreferences {
     private val snifflingWin = "snifflingWin"
     private val snifflingLose = "snifflingLose"
 
-    private val drawLotsWin = ""
-    private val drawLotsLose = ""
+    private val drawLotsWin = "drawLotsWin"
+    private val drawLotsLose = "drawLotsLose"
 
-    private val jellyBronze = ""
-    private val jellySilver = ""
-    private val jellyGold = ""
+    private val jellyBronze = "jellyBronze"
+    private val jellySilver = "jellySilver"
+    private val jellyGold = "jellyGold"
 
     private fun getSharedPreferences(ctx: Context?): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(ctx!!)
@@ -231,5 +231,9 @@ class SharedPreferences {
         }
 
         return getSharedPreferences(ctx).getInt(tag, 0)
+    }
+    //private val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences()
+    fun clear(ctx: Context?) {
+        getSharedPreferences(ctx).edit().clear().apply()
     }
 }

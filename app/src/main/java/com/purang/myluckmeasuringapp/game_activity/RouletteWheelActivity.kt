@@ -39,13 +39,13 @@ class RouletteWheelActivity : AppCompatActivity() {
         binding.wheel.setLuckyWheelReachTheTarget {
             Log.e("point", point.toString())
             if (point == randomIdx) {
-                gamePercentage = (gamePercentage.toDouble() * (randomIdx.toDouble() / point.toDouble())).toString()
+                gamePercentage = (gamePercentage.toDouble() * (1.0 / randomIdx.toDouble())).toString()
                 Log.e("gamePercentage", gamePercentage)
                 gameResult = "win"
                 sp.setRoulette(this@RouletteWheelActivity, gameResult)
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
             } else {
-                gamePercentage = (gamePercentage.toDouble() * ( (point - 1).toDouble() / point.toDouble())).toString()
+                gamePercentage = (gamePercentage.toDouble() * ( (randomIdx-1).toDouble() / randomIdx.toDouble())).toString()
                 Log.e("gamePercentage", gamePercentage)
                 gameResult = "lose"
                 sp.setRoulette(this@RouletteWheelActivity, gameResult)
@@ -58,7 +58,7 @@ class RouletteWheelActivity : AppCompatActivity() {
 
         //시작
         binding.wheelBtn.setOnClickListener {
-            val tempPoint = Random.nextInt(randomIdx)+1
+            val tempPoint = Random.nextInt(10)+2
 
             point = tempPoint
             Log.e("rotate", point.toString())

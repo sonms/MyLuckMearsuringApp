@@ -6,12 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.adapter.MemorialsAdapter
 import com.purang.myluckmeasuringapp.dao.GameResultEntity
 import com.purang.myluckmeasuringapp.database.ResultDatabase
 import com.purang.myluckmeasuringapp.databinding.FragmentAccountBinding
 import com.purang.myluckmeasuringapp.databinding.FragmentMemorialsBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +52,7 @@ class MemorialsFragment : Fragment() {
     ): View {
         binding = FragmentMemorialsBinding.inflate(inflater, container, false)
         db = ResultDatabase.getInstance(requireContext())
-
+        binding.memoAd.loadAd(AdRequest.Builder().build())
         initRecyclerView()
 
 
@@ -55,20 +60,23 @@ class MemorialsFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        gameData = db!!.resultDao().getAll()
+        CoroutineScope(Dispatchers.Main).launch {
+            gameData = withContext(Dispatchers.IO) {
+                db!!.resultDao().getAll().reversed()
+            }
+            if (gameData.isNotEmpty()) {
+                binding.nestedScrollView.visibility = View.VISIBLE
+                binding.nonData.visibility = View.GONE
+            } else {
+                binding.nestedScrollView.visibility = View.GONE
+                binding.nonData.visibility = View.VISIBLE
+            }
 
-        if (gameData.isNotEmpty()) {
-            binding.nestedScrollView.visibility = View.VISIBLE
-            binding.nonData.visibility = View.GONE
-        } else {
-            binding.nestedScrollView.visibility = View.GONE
-            binding.nonData.visibility = View.VISIBLE
+            adapter = MemorialsAdapter(gameData)
+            binding.memorialRv.adapter = adapter
+            binding.memorialRv.setHasFixedSize(true)
+            binding.memorialRv.layoutManager = LinearLayoutManager(requireContext())
         }
-
-        adapter = MemorialsAdapter(gameData)
-        binding.memorialRv.adapter = adapter
-        binding.memorialRv.setHasFixedSize(true)
-        binding.memorialRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
     companion object {

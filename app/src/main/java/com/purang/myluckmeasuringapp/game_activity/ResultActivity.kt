@@ -53,7 +53,7 @@ class ResultActivity : AppCompatActivity() {
         initView()
         initAd()
         //initNativeAd()
-        preNickName = sharedPref?.getString("saveNickname", "") ?: ""
+        //preNickName = sharedPref?.getString("saveNickname", "") ?: ""
 
         binding.bottomBtn.setOnClickListener {
             //data 저장도 여기서 Todo
@@ -109,26 +109,32 @@ class ResultActivity : AppCompatActivity() {
     private fun initView() {
         //binding.resultLottie.playAnimation()
         //binding.resultLottie.cancelAnimation()
+        val sharedPref = this@ResultActivity.getSharedPreferences("saveData", Context.MODE_PRIVATE)
+        preNickName = sharedPref.getString("saveNickname", "") ?: ""
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
         val resultDataSet = preGameResult.split(" ").map { it.toString() }
         Log.e("resultTest", resultDataSet.toString())
+        Log.e("preNickName", preNickName.toString())
         val mFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         val mNow = System.currentTimeMillis();
         val mDate = Date(mNow);
         val date = mFormat.format(mDate);
 
         resultData = GameResultEntity(
-            userName = preNickName.ifEmpty {
+            userName = if (preNickName == "") {
                 "유저1"
+            } else {
+                preNickName
             },
-            gameDice = preGameResult[0].toString(),
-            gameRoulette = preGameResult[1].toString(),
-            gameSniffling = preGameResult[2].toString(),
-            gameDrawLots = preGameResult[3].toString(),
-            gameJelly = preGameResult[4].toString(),
+            gameDice = resultDataSet[0].toString(),
+            gameRoulette = resultDataSet[1].toString(),
+            gameSniffling = resultDataSet[2].toString(),
+            gameDrawLots = resultDataSet[3].toString(),
+            gameJelly = resultDataSet[4].toString(),
             gameDate = date.toString(),
-            gamePercentage = gamePercentage
+            gamePercentage = gamePercentage.toString()
         )
+        Log.e("myData", resultData.toString())
 
         // 페이드 아웃 애니메이션 설정
         val fadeOutAnimation = AlphaAnimation(0.0f, 1.0f)

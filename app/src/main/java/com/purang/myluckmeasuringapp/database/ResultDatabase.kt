@@ -46,5 +46,10 @@ abstract class ResultDatabase : RoomDatabase() { //이 클래스는 데이터베
         fun destroyInstance() {
             instance = null
         }
+
+        fun clearAllTables() {
+            // 해당 메서드는 Room 라이브러리 버전 2.1.0 이상에서만 사용 가능합니다.
+            instance?.clearAllTables()
+        }
     }
 }

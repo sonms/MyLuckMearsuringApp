@@ -98,7 +98,7 @@ class AccountFragment : Fragment() {
             OssLicensesMenuActivity.setActivityTitle("오픈소스 라이선스")
         }
 
-        binding.accountSwitch.setOnClickListener {
+        /*binding.accountSwitch.setOnClickListener {
             // 현재 선택된 테마 인덱스 가져오기
             val currentThemeIndex = getCurrentThemeIndex(requireContext())
 
@@ -110,7 +110,7 @@ class AccountFragment : Fragment() {
 
             // 액티비티 다시 시작
             recreate(requireActivity())
-        }
+        }*/
 
         return binding.root
     }

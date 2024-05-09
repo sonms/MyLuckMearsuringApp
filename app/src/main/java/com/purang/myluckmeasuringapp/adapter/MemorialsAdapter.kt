@@ -48,6 +48,7 @@ class MemorialsAdapter(private var items: List<GameResultEntity>) : RecyclerView
 
     inner class ViewHolder(binding: MemorialItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GameResultEntity, position: Int) {
+            binding.memoNicknameTv.text = item.userName
             binding.memoDiceTv.text = item.gameDice
 
             if (item.gameRoulette == "win") {

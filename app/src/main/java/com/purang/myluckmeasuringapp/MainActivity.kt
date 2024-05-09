@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this) {} //광고 초기화화
 
-        setFragment(TAG_HOME, HomeFragment())
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_content, HomeFragment())
+            .commit()
         initNavigationBar()
 
         val bottomSheet = BottomAdFragment()
@@ -122,11 +124,14 @@ class MainActivity : AppCompatActivity() {
                     /*oldFragment = HomeFragment()
                     oldTAG = TAG_HOME*/
                     //setToolbarView(TAG_HOME, oldTAG)
-                    setFragment(TAG_HOME, HomeFragment())
+                    //setFragment(TAG_HOME, HomeFragment())
                    /* toolbarType = "기본"
                     setToolbarView(toolbarType)*/
                     /*isClicked = false
                     isSettingClicked = false*/
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_content, HomeFragment())
+                        .commit()
                 }
 
                 R.id.navigation_statistics -> {
@@ -138,8 +143,10 @@ class MainActivity : AppCompatActivity() {
                     setToolbarView(toolbarType)
                     isClicked = false
                     isSettingClicked = false*/
-                    setFragment(TAG_STATISTICS, StatisticsFragment())
-                    supportFragmentManager.beginTransaction().replace(R.id.navigation_statistics, StatisticsFragment()).commit()
+                    //setFragment(TAG_STATISTICS, StatisticsFragment())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_content, StatisticsFragment())
+                        .commit()
                 }
 
                 R.id.navigation_memorials -> {
@@ -147,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                         putExtra("type","ADD")
                     }
                     requestActivity.launch(intent)*/
-                    setFragment(TAG_MEMORIALS, MemorialsFragment())
+                    //setFragment(TAG_MEMORIALS, MemorialsFragment())
                     /*oldFragment = HomeFragment()
                     oldTAG = TAG_HOME
                     //setToolbarView(TAG_HOME, oldTAG)
@@ -155,6 +162,9 @@ class MainActivity : AppCompatActivity() {
                     setToolbarView(false)
                     isClicked = false
                     isSettingClicked = false*/
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_content, MemorialsFragment())
+                        .commit()
                 }
 
 
@@ -167,13 +177,19 @@ class MainActivity : AppCompatActivity() {
                     setToolbarView(toolbarType)
                     isClicked = false
                     isSettingClicked = false*/
-                    setFragment(TAG_ACCOUNT, AccountFragment())
+                    //setFragment(TAG_ACCOUNT, AccountFragment())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_content, AccountFragment())
+                        .commit()
                 }
 
 
                 else -> {
 
-                    setFragment(TAG_HOME, HomeFragment())
+                    //setFragment(TAG_HOME, HomeFragment())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_content, HomeFragment())
+                        .commit()
                 }
             }
             true
