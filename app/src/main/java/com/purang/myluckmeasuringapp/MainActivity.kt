@@ -139,6 +139,7 @@ class MainActivity : AppCompatActivity() {
                     isClicked = false
                     isSettingClicked = false*/
                     setFragment(TAG_STATISTICS, StatisticsFragment())
+                    supportFragmentManager.beginTransaction().replace(R.id.navigation_statistics, StatisticsFragment()).commit()
                 }
 
                 R.id.navigation_memorials -> {

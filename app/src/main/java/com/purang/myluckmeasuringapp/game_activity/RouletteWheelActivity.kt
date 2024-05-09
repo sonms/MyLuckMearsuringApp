@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.bluehomestudio.luckywheel.WheelItem
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.ActivityRouletteWheelBinding
 import kotlin.random.Random
@@ -25,6 +26,7 @@ class RouletteWheelActivity : AppCompatActivity() {
     private var gameResult = ""
     private var preGameResult = ""
     private var gamePercentage = ""
+    private val sp = SharedPreferences()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRouletteWheelBinding.inflate(layoutInflater)
@@ -40,11 +42,13 @@ class RouletteWheelActivity : AppCompatActivity() {
                 gamePercentage = (gamePercentage.toDouble() * (randomIdx.toDouble() / point.toDouble())).toString()
                 Log.e("gamePercentage", gamePercentage)
                 gameResult = "win"
+                sp.setRoulette(this@RouletteWheelActivity, gameResult)
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
             } else {
                 gamePercentage = (gamePercentage.toDouble() * ( (point - 1).toDouble() / point.toDouble())).toString()
                 Log.e("gamePercentage", gamePercentage)
                 gameResult = "lose"
+                sp.setRoulette(this@RouletteWheelActivity, gameResult)
                 Toast.makeText(this@RouletteWheelActivity, "꽝...ㅠㅠ", Toast.LENGTH_SHORT).show()
             }
 

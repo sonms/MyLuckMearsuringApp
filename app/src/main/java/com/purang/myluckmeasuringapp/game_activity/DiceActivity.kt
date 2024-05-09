@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.ViewCompat.animate
 import com.bumptech.glide.Glide
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.ActivityDiceBinding
 import kotlin.random.Random
@@ -56,7 +57,7 @@ class DiceActivity : AppCompatActivity() {
         // 랜덤으로 이미지 선택
         val randomIndex = Random.nextInt(imageResources.size)
         val randomImageResource = imageResources[randomIndex]
-
+        val sp = SharedPreferences()
         Log.e("randomTest", randomImageResource.toString())
 
         // 애니메이션으로 이미지 전환
@@ -75,6 +76,8 @@ class DiceActivity : AppCompatActivity() {
             }).start()
         gameResult = randomIndex+1
         Log.e("gameResult", gameResult.toString())
+
+        sp.setDice(this@DiceActivity, gameResult)
 
         binding.diceBtn.visibility = View.GONE
         binding.diceNextBtn.visibility = View.VISIBLE

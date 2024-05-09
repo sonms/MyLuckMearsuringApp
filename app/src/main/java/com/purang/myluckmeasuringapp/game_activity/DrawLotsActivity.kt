@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.adapter.DrawLotsAdapter
 import com.purang.myluckmeasuringapp.dao.DrawLotsData
@@ -24,6 +25,7 @@ class DrawLotsActivity : AppCompatActivity() {
     private var gridLayoutManager = GridLayoutManager(this@DrawLotsActivity, 4)
     private lateinit var adapter : DrawLotsAdapter
     private var gamePercentage = ""
+    private val sp = SharedPreferences()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,10 +62,12 @@ class DrawLotsActivity : AppCompatActivity() {
                 if (item.content == "win") {
                     gamePercentage = (gamePercentage.toDouble() * (1.0 / itemData.size)).toString()
                     gameResult = "win"
+                    sp.setDrawLots(this@DrawLotsActivity, gameResult)
                     Toast.makeText(this@DrawLotsActivity, "성공!!", Toast.LENGTH_SHORT).show()
                 } else {
                     gamePercentage = (gamePercentage.toDouble() * ( (itemData.size - 1).toDouble() / itemData.size)).toString()
                     gameResult = "lose"
+                    sp.setDrawLots(this@DrawLotsActivity, gameResult)
                     Toast.makeText(this@DrawLotsActivity, "땡~", Toast.LENGTH_SHORT).show()
                 }
                 binding.bottomNextBtn.visibility = View.VISIBLE

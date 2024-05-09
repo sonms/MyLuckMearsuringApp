@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.purang.myluckmeasuringapp.BottomAdFragment
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.FragmentStatisticsBinding
 import dalvik.system.ZipPathValidator.setCallback
@@ -39,11 +40,56 @@ class StatisticsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
 
+        initDataSet()
 
         return binding.root
+    }
+
+    private fun initDataSet() {
+        val sp = SharedPreferences()
+
+        val dice1 = sp.getDice(requireContext(), 1)
+        val dice2 = sp.getDice(requireContext(), 2)
+        val dice3 = sp.getDice(requireContext(), 3)
+        val dice4 = sp.getDice(requireContext(), 4)
+        val dice5 = sp.getDice(requireContext(), 5)
+        val dice6 = sp.getDice(requireContext(), 6)
+
+        val rouletteW = sp.getRoulette(requireContext(), "win")
+        val rouletteL = sp.getRoulette(requireContext(), "lose")
+
+        val sniW = sp.getSniffling(requireContext(), "win")
+        val sniL = sp.getSniffling(requireContext(), "lose")
+
+        val dlW = sp.getDrawLots(requireContext(), "win")
+        val dlL = sp.getDrawLots(requireContext(), "lose")
+
+        val jG = sp.getJelly(requireContext(), "gold")
+        val jS = sp.getJelly(requireContext(), "silver")
+        val jB = sp.getJelly(requireContext(), "bronze")
+
+        binding.dice1Tv.text = dice1.toString()
+        binding.dice2Tv.text = dice2.toString()
+        binding.dice3Tv.text = dice3.toString()
+        binding.dice4Tv.text = dice4.toString()
+        binding.dice5Tv.text = dice5.toString()
+        binding.dice6Tv.text = dice6.toString()
+
+        binding.rouletteWinTv.text = rouletteW.toString()
+        binding.rouletteLoseTv.text = rouletteL.toString()
+
+        binding.snifflingWinTv.text = sniW.toString()
+        binding.snifflingLoseTv.text = sniL.toString()
+
+        binding.drawsLotsWinTv.text = dlW.toString()
+        binding.drawLotsLoseTv.text = dlL.toString()
+
+        binding.jellyGoldTv.text = jG.toString()
+        binding.jellySilverTv.text = jS.toString()
+        binding.jellyBronzeTv.text = jB.toString()
     }
 
     companion object {

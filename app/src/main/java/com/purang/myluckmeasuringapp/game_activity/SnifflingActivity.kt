@@ -11,6 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.Toast
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.ActivitySnifflingBinding
 import kotlin.random.Random
@@ -21,7 +22,7 @@ class SnifflingActivity : AppCompatActivity() {
     private var preGameResult = ""
     private var random = ""
     private var gamePercentage : String = ""
-
+    private val sp = SharedPreferences()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySnifflingBinding.inflate(layoutInflater)
@@ -81,9 +82,11 @@ class SnifflingActivity : AppCompatActivity() {
                     binding.snifflingResultTv.visibility = View.VISIBLE
                      if (random.split(" ").last() == "홀") {
                          gameResult = "win"
+                         sp.setSniffling(this@SnifflingActivity, gameResult)
                          Toast.makeText(this@SnifflingActivity, "정답!!!", Toast.LENGTH_SHORT).show()
                     } else {
                          gameResult ="lose"
+                         sp.setSniffling(this@SnifflingActivity, gameResult)
                          Toast.makeText(this@SnifflingActivity, "땡~!", Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -56,6 +56,15 @@ class MemorialsFragment : Fragment() {
 
     private fun initRecyclerView() {
         gameData = db!!.resultDao().getAll()
+
+        if (gameData.isNotEmpty()) {
+            binding.nestedScrollView.visibility = View.VISIBLE
+            binding.nonData.visibility = View.GONE
+        } else {
+            binding.nestedScrollView.visibility = View.GONE
+            binding.nonData.visibility = View.VISIBLE
+        }
+
         adapter = MemorialsAdapter(gameData)
         binding.memorialRv.adapter = adapter
         binding.memorialRv.setHasFixedSize(true)

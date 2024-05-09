@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.dao.MyViewModel
 import com.purang.myluckmeasuringapp.databinding.ActivityJellyUpgradeBinding
@@ -22,6 +23,7 @@ class JellyUpgradeActivity : AppCompatActivity() {
     private var nextJelly = false
     private lateinit var viewModel: MyViewModel
     private var gamePercentage = ""
+    private val sp = SharedPreferences()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJellyUpgradeBinding.inflate(layoutInflater)
@@ -58,7 +60,7 @@ class JellyUpgradeActivity : AppCompatActivity() {
         }
 
         binding.bottomNextBtn.setOnClickListener {
-            gamePercentage = when(gameResult) {
+            /*gamePercentage = when(gameResult) {
                 "gold" -> {
                     (gamePercentage.toDouble() * 1.0/100).toString()
                 }
@@ -70,7 +72,7 @@ class JellyUpgradeActivity : AppCompatActivity() {
                 else -> {
                     (gamePercentage.toDouble() * 85.0/100).toString()
                 }
-            }
+            }*/
             val temp = "%.7f".format(gamePercentage.toDouble())
             val intent = Intent(this@JellyUpgradeActivity, ResultActivity::class.java).apply {
                 putExtra("result", "$preGameResult $gameResult")
@@ -115,6 +117,8 @@ class JellyUpgradeActivity : AppCompatActivity() {
                         "bronze"
                     }
                 }*/
+                gamePercentage = (gamePercentage.toDouble() * 1.0/100).toString()
+                sp.setJelly(this@JellyUpgradeActivity, gameResult)
                 viewModel.updateRemainingChance(0)
             }
         } else if (nextRand < 15 && !nextJelly) {
@@ -127,6 +131,8 @@ class JellyUpgradeActivity : AppCompatActivity() {
                 //binding.drawItemTv.text = item.number.toString()
                 nextJelly = true
                 gameResult = "silver"
+                sp.setJelly(this@JellyUpgradeActivity, gameResult)
+                gamePercentage = (gamePercentage.toDouble() * 14.0/100).toString()
                 /*gameResult = when (gameResult) {
                     "gold" -> {
                         "gold"
@@ -152,6 +158,8 @@ class JellyUpgradeActivity : AppCompatActivity() {
                     "bronze"
                 }
             }
+            gamePercentage = (gamePercentage.toDouble() * 85.0/100).toString()
+            sp.setJelly(this@JellyUpgradeActivity, gameResult)
             Toast.makeText(this@JellyUpgradeActivity, "강화 실패!", Toast.LENGTH_SHORT).show()
         }
     }
