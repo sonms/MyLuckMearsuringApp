@@ -113,8 +113,8 @@ class ResultActivity : AppCompatActivity() {
         preNickName = sharedPref.getString("saveNickname", "") ?: ""
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
         val resultDataSet = preGameResult.split(" ").map { it.toString() }
-        Log.e("resultTest", resultDataSet.toString())
-        Log.e("preNickName", preNickName.toString())
+        //Log.e("resultTest", resultDataSet.toString())
+        //Log.e("preNickName", preNickName.toString())
         val mFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         val mNow = System.currentTimeMillis();
         val mDate = Date(mNow);
@@ -134,7 +134,7 @@ class ResultActivity : AppCompatActivity() {
             gameDate = date.toString(),
             gamePercentage = gamePercentage.toString()
         )
-        Log.e("myData", resultData.toString())
+        //Log.e("myData", resultData.toString())
 
         // 페이드 아웃 애니메이션 설정
         val fadeOutAnimation = AlphaAnimation(0.0f, 1.0f)

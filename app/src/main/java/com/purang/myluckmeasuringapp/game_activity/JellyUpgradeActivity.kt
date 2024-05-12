@@ -95,7 +95,7 @@ class JellyUpgradeActivity : AppCompatActivity() {
 
     private fun probabilityCalculation() {
         val nextRand = Random.nextInt(100) + 1
-        Log.e("jelly", nextRand.toString())
+        //Log.e("jelly", nextRand.toString())
         if (nextRand == 99 && nextJelly) {
             if (remainingChance > 0) {
                 //gamePercentage = (gamePercentage.toDouble() * 1.0/100).toString()

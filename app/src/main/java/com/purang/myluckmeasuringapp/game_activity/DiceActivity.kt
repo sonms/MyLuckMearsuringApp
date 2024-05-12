@@ -58,7 +58,7 @@ class DiceActivity : AppCompatActivity() {
         val randomIndex = Random.nextInt(imageResources.size)
         val randomImageResource = imageResources[randomIndex]
         val sp = SharedPreferences()
-        Log.e("randomTest", randomImageResource.toString())
+        //Log.e("randomTest", randomImageResource.toString())
 
         // 애니메이션으로 이미지 전환
         binding.diceImg.animate().alpha(0f).setDuration(1000)
@@ -75,7 +75,7 @@ class DiceActivity : AppCompatActivity() {
                 }
             }).start()
         gameResult = randomIndex+1
-        Log.e("gameResult", gameResult.toString())
+        //Log.e("gameResult", gameResult.toString())
 
         sp.setDice(this@DiceActivity, gameResult)
 

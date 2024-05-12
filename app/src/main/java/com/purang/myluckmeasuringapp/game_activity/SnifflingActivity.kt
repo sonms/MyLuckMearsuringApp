@@ -169,8 +169,8 @@ class SnifflingActivity : AppCompatActivity() {
         val randomNumber = Random.nextInt(100) + 1
         val randomGenerator = Random(System.currentTimeMillis())
         val result = randomGenerator.nextInt(1, 100)
-        Log.e("sniffling", randomNumber.toString())
-        Log.e("sniffling", result.toString())
+        //Log.e("sniffling", randomNumber.toString())
+        //Log.e("sniffling", result.toString())
         random = if (randomNumber % 2 == 0) {
             "$randomNumber 짝"
         } else {

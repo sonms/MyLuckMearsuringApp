@@ -37,16 +37,16 @@ class RouletteWheelActivity : AppCompatActivity() {
 
         //룰렛이 다 돌아갔을 때
         binding.wheel.setLuckyWheelReachTheTarget {
-            Log.e("point", point.toString())
+            //Log.e("point", point.toString())
             if (point == randomIdx) {
                 gamePercentage = (gamePercentage.toDouble() * (1.0 / randomIdx.toDouble())).toString()
-                Log.e("gamePercentage", gamePercentage)
+                //Log.e("gamePercentage", gamePercentage)
                 gameResult = "win"
                 sp.setRoulette(this@RouletteWheelActivity, gameResult)
                 Toast.makeText(this@RouletteWheelActivity, "당첨~!~!~!", Toast.LENGTH_SHORT).show()
             } else {
                 gamePercentage = (gamePercentage.toDouble() * ( (randomIdx-1).toDouble() / randomIdx.toDouble())).toString()
-                Log.e("gamePercentage", gamePercentage)
+                //Log.e("gamePercentage", gamePercentage)
                 gameResult = "lose"
                 sp.setRoulette(this@RouletteWheelActivity, gameResult)
                 Toast.makeText(this@RouletteWheelActivity, "꽝...ㅠㅠ", Toast.LENGTH_SHORT).show()
@@ -61,7 +61,7 @@ class RouletteWheelActivity : AppCompatActivity() {
             val tempPoint = Random.nextInt(10)+2
 
             point = tempPoint
-            Log.e("rotate", point.toString())
+            //Log.e("rotate", point.toString())
             //대상설정
             binding.wheel.rotateWheelTo(point)
         }
@@ -99,7 +99,7 @@ class RouletteWheelActivity : AppCompatActivity() {
         //val bitmap1 = bitmapDrawableWinningIcon.bitmap
         //val bitmap2 = bitmapDrawableLoseIcon.bitmap
 
-        Log.e("randomIdx", randomIdx.toString())
+        //Log.e("randomIdx", randomIdx.toString())
 
         repeat(randomIdx) {
             //println(it)

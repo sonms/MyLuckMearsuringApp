@@ -58,7 +58,7 @@ class DrawLotsActivity : AppCompatActivity() {
         adapter.setItemClickListener(object : DrawLotsAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, itemId: Int?) {
                 val item = itemData[position]
-                Log.e("drawactivity", itemData[position].content)
+                //Log.e("drawactivity", itemData[position].content)
                 if (item.content == "win") {
                     gamePercentage = (gamePercentage.toDouble() * (1.0 / itemData.size)).toString()
                     gameResult = "win"
