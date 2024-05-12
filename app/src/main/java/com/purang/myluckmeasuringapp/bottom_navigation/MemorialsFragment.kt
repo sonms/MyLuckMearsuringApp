@@ -1,12 +1,18 @@
 package com.purang.myluckmeasuringapp.bottom_navigation
 
+import android.content.Context
 import android.os.Bundle
+import android.os.PowerManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.purang.myluckmeasuringapp.BuildConfig
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.adapter.MemorialsAdapter
 import com.purang.myluckmeasuringapp.dao.GameResultEntity
@@ -37,7 +43,8 @@ class MemorialsFragment : Fragment() {
     private var adapter : MemorialsAdapter? = null
     private lateinit var gameData : List<GameResultEntity>
     private var db: ResultDatabase? = null
-
+    private var adRequest : AdRequest? = null
+    private var adId = BuildConfig.banner_ads_id
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,7 +59,7 @@ class MemorialsFragment : Fragment() {
     ): View {
         binding = FragmentMemorialsBinding.inflate(inflater, container, false)
         db = ResultDatabase.getInstance(requireContext())
-        binding.memoAd.loadAd(AdRequest.Builder().build())
+        initAd()
         initRecyclerView()
 
 
@@ -77,6 +84,40 @@ class MemorialsFragment : Fragment() {
             binding.memorialRv.setHasFixedSize(true)
             binding.memorialRv.layoutManager = LinearLayoutManager(requireContext())
         }
+    }
+
+    private fun initAd() {
+        adRequest = AdRequest.Builder().build()
+       /* binding.memoAd.adSize.apply {
+             AdSize.BANNER
+        }
+        binding.memoAd.adUnitId = adId*/
+        binding.memoAd.loadAd(adRequest!!)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadAdIfNeeded()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAdLoading()
+    }
+
+    private fun loadAdIfNeeded() {
+        if (isScreenOn()) {
+            initAd()
+        }
+    }
+
+    private fun stopAdLoading() {
+        adRequest = null
+    }
+
+    private fun isScreenOn(): Boolean {
+        val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isInteractive
     }
 
     companion object {

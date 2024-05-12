@@ -2,6 +2,7 @@ package com.purang.myluckmeasuringapp
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.animation.AnticipateInterpolator
+import android.widget.Toast
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.DialogFragment
@@ -18,6 +20,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.Helper.ThemeHelper
 import com.purang.myluckmeasuringapp.bottom_navigation.AccountFragment
 import com.purang.myluckmeasuringapp.bottom_navigation.HomeFragment
@@ -46,25 +49,41 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         ThemeHelper.applyTheme(this)
         setContentView(mBinding.root)
-
         MobileAds.initialize(this) {} //광고 초기화화
+
+        showBottomSheetAd(this)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_content, HomeFragment())
             .commit()
         initNavigationBar()
 
-        val bottomSheet = BottomAdFragment()
-        bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
-        bottomSheet.show(this.supportFragmentManager, bottomSheet.tag)
-        bottomSheet.apply {
-            setCallback(object : BottomAdFragment.OnSendFromBottomSheetDialog{
-                override fun sendValue(value: String) {
-                    Log.d("test", "BottomSheetDialog -> 액티비티로 전달된 값 : $value")
-                }
-            })
-        }
 
+
+    }
+    private fun showBottomSheetAd(context: Context) {
+        val sharedPreference = SharedPreferences()
+        val lastBottomSheetTime = sharedPreference.getLastBottomSheetTime(context)
+        val currentTime = System.currentTimeMillis()
+
+        // 마지막으로 바텀시트가 띄워진 시간부터 24시간이 지났는지 확인
+        if (currentTime - lastBottomSheetTime >= 24 * 60 * 60 * 1000) {
+            // 24시간이 지났으므로 바텀시트를 띄웁니다.
+            // 여기에 바텀시트를 띄우는 코드를 추가합니다.
+            val bottomSheet = BottomAdFragment()
+            //bottomSheet.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+            bottomSheet.show(this.supportFragmentManager, bottomSheet.tag)
+            bottomSheet.apply {
+                setCallback(object : BottomAdFragment.OnSendFromBottomSheetDialog{
+                    override fun sendValue(value: String) {
+                        Log.d("test", "BottomSheetDialog -> 액티비티로 전달된 값 : $value")
+                        Toast.makeText(this@MainActivity, "24시간 동안 끄기로 설정되었습니다", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            // 바텀시트가 띄워진 시간을 저장합니다.
+            sharedPreference.setLastBottomSheetTime(context, currentTime)
+        }
     }
 
     private fun initData() {

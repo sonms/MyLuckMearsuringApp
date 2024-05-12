@@ -1,6 +1,8 @@
 package com.purang.myluckmeasuringapp.bottom_navigation
 
+import android.content.Context
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.AdRequest
 import com.purang.myluckmeasuringapp.BottomAdFragment
+import com.purang.myluckmeasuringapp.BuildConfig
 import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.FragmentStatisticsBinding
@@ -29,6 +32,7 @@ class StatisticsFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding : FragmentStatisticsBinding
+    private var adRequest : AdRequest? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +47,7 @@ class StatisticsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
-        binding.statisAd.loadAd(AdRequest.Builder().build())
+
         initDataSet()
 
         return binding.root
@@ -91,6 +95,36 @@ class StatisticsFragment : Fragment() {
         binding.jellyGoldTv.text = jG.toString()
         binding.jellySilverTv.text = jS.toString()
         binding.jellyBronzeTv.text = jB.toString()
+    }
+
+    private fun initAd() {
+        adRequest = AdRequest.Builder().build()
+        //binding.statisAd.adUnitId = BuildConfig.banner_ads_id
+        binding.statisAd.loadAd(adRequest!!)
+    }
+    override fun onResume() {
+        super.onResume()
+        loadAdIfNeeded()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAdLoading()
+    }
+
+    private fun loadAdIfNeeded() {
+        if (isScreenOn()) {
+            initAd()
+        }
+    }
+
+    private fun stopAdLoading() {
+        adRequest = null
+    }
+
+    private fun isScreenOn(): Boolean {
+        val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isInteractive
     }
 
     companion object {

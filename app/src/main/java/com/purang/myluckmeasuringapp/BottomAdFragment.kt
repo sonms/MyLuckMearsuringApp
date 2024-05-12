@@ -1,8 +1,10 @@
 package com.purang.myluckmeasuringapp
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -40,7 +43,7 @@ class BottomAdFragment : BottomSheetDialogFragment() {
     private var listener: OnSendFromBottomSheetDialog? = null
     private lateinit var binding : FragmentBottomAdBinding
     //private var interstitialAd : InterstitialAd? = null
-    private lateinit var nativeAdView: NativeAdView
+    private var adRequest : AdRequest? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -98,6 +101,7 @@ class BottomAdFragment : BottomSheetDialogFragment() {
             if (listener == null) return@setOnClickListener
             listener?.sendValue("dismiss front")
             dismiss()
+            stopAdLoading()
         }
 
 
@@ -131,7 +135,7 @@ class BottomAdFragment : BottomSheetDialogFragment() {
         return dialog
     }
     private fun initAd() { //전면광고
-        val adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+        val adLoader = AdLoader.Builder(requireContext(), BuildConfig.front_ads_id)
             .forNativeAd { ad ->
                 // 네이티브 광고 로드 완료 시 실행되는 콜백
                 val adView = binding.nativeAdView
@@ -191,12 +195,38 @@ class BottomAdFragment : BottomSheetDialogFragment() {
         adView.setNativeAd(ad)
     }
 
+
     interface OnSendFromBottomSheetDialog {
         fun sendValue(value: String)
     }
 
     fun setCallback(listener: OnSendFromBottomSheetDialog) {
         this.listener = listener
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadAdIfNeeded()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAdLoading()
+    }
+
+    private fun loadAdIfNeeded() {
+        if (isScreenOn()) {
+            initAd()
+        }
+    }
+
+    private fun stopAdLoading() {
+        adRequest = null
+    }
+
+    private fun isScreenOn(): Boolean {
+        val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isInteractive
     }
 
     companion object {

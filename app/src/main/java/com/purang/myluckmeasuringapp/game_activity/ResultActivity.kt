@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.PowerManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -19,6 +20,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.purang.myluckmeasuringapp.BuildConfig
 import com.purang.myluckmeasuringapp.MainActivity
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.dao.GameResultEntity
@@ -40,7 +42,7 @@ class ResultActivity : AppCompatActivity() {
     private var sharedPref : SharedPreferences? = null
     private var preNickName : String = ""
     private var gamePercentage = ""
-    lateinit var adLoader: AdLoader
+    private var adRequest : AdRequest? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
@@ -56,7 +58,7 @@ class ResultActivity : AppCompatActivity() {
         //preNickName = sharedPref?.getString("saveNickname", "") ?: ""
 
         binding.bottomBtn.setOnClickListener {
-            //data 저장도 여기서 Todo
+
             CoroutineScope(Dispatchers.IO).launch {
                 if (resultData != null) {
                     db!!.resultDao().insertResult(resultData!!)
@@ -112,13 +114,13 @@ class ResultActivity : AppCompatActivity() {
         val sharedPref = this@ResultActivity.getSharedPreferences("saveData", Context.MODE_PRIVATE)
         preNickName = sharedPref.getString("saveNickname", "") ?: ""
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
-        val resultDataSet = preGameResult.split(" ").map { it.toString() }
+        val resultDataSet = preGameResult.split(" ").map { it }
         //Log.e("resultTest", resultDataSet.toString())
         //Log.e("preNickName", preNickName.toString())
         val mFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-        val mNow = System.currentTimeMillis();
-        val mDate = Date(mNow);
-        val date = mFormat.format(mDate);
+        val mNow = System.currentTimeMillis()
+        val mDate = Date(mNow)
+        val date = mFormat.format(mDate)
 
         resultData = GameResultEntity(
             userName = if (preNickName == "") {
@@ -126,13 +128,13 @@ class ResultActivity : AppCompatActivity() {
             } else {
                 preNickName
             },
-            gameDice = resultDataSet[0].toString(),
-            gameRoulette = resultDataSet[1].toString(),
-            gameSniffling = resultDataSet[2].toString(),
-            gameDrawLots = resultDataSet[3].toString(),
-            gameJelly = resultDataSet[4].toString(),
+            gameDice = resultDataSet[0],
+            gameRoulette = resultDataSet[1],
+            gameSniffling = resultDataSet[2],
+            gameDrawLots = resultDataSet[3],
+            gameJelly = resultDataSet[4],
             gameDate = date.toString(),
-            gamePercentage = gamePercentage.toString()
+            gamePercentage = gamePercentage
         )
         //Log.e("myData", resultData.toString())
 
@@ -227,15 +229,20 @@ class ResultActivity : AppCompatActivity() {
         }
 
         binding.resultLottie.playAnimation()
-        binding.resultAd.loadAd(AdRequest.Builder().build())
 
         binding.bottomBtn.visibility = View.VISIBLE
+    }
+
+    private fun initBannerAd() {
+        adRequest = AdRequest.Builder().build()
+        //binding.resultAd.adUnitId = BuildConfig.banner_ads_id
+        binding.resultAd.loadAd(adRequest!!)
     }
 
     private fun initAd() { //전면광고
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(this,
-            "ca-app-pub-3940256099942544/1033173712",
+           BuildConfig.front_ads_id,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(p0: InterstitialAd) {
@@ -246,7 +253,7 @@ class ResultActivity : AppCompatActivity() {
                 override fun onAdFailedToLoad(p0: LoadAdError) {
                     super.onAdFailedToLoad(p0)
                     interstitialAd = null
-                    Log.e("onAdFail", p0.message.toString())
+                    Log.e("onAdFail", p0.message)
                 }
             }
         )
@@ -288,4 +295,32 @@ class ResultActivity : AppCompatActivity() {
 
         adLoader.loadAd(AdRequest.Builder().build())
     }*/
+    //private var adLoader: AdLoader? = null
+
+    override fun onResume() {
+        super.onResume()
+        loadAdIfNeeded()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAdLoading()
+    }
+
+    private fun loadAdIfNeeded() {
+        if (isScreenOn()) {
+            initAd()
+            initBannerAd()
+        }
+    }
+
+    private fun stopAdLoading() {
+        adRequest = null
+        interstitialAd = null
+    }
+
+    private fun isScreenOn(): Boolean {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isInteractive
+    }
 }
