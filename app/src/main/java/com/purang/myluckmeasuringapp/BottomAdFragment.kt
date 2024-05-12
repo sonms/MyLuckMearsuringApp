@@ -134,8 +134,8 @@ class BottomAdFragment : BottomSheetDialogFragment() {
 
         return dialog
     }
-    private fun initAd() { //전면광고
-        val adLoader = AdLoader.Builder(requireContext(), BuildConfig.front_ads_id)
+    private fun initAd() {
+        val adLoader = AdLoader.Builder(requireContext(), BuildConfig.native_ads_id)
             .forNativeAd { ad ->
                 // 네이티브 광고 로드 완료 시 실행되는 콜백
                 val adView = binding.nativeAdView

@@ -25,6 +25,8 @@ class SharedPreferences {
     private val jellySilver = "jellySilver"
     private val jellyGold = "jellyGold"
 
+    private val userName = "saveNickname"
+
     // SharedPreferences 키
     private val PREF_LAST_BOTTOM_SHEET_TIME = "last_bottom_sheet_time"
 
@@ -248,5 +250,15 @@ class SharedPreferences {
 
     fun getLastBottomSheetTime(ctx: Context?): Long {
         return getSharedPreferences(ctx).getLong(PREF_LAST_BOTTOM_SHEET_TIME, 0L)
+    }
+
+    fun setUserName(ctx: Context?, name: String?) {
+        val editor = getSharedPreferences(ctx).edit()
+        editor.putString(userName, name!!)
+        editor.apply()
+    }
+
+    fun getUserName(ctx: Context?): String? {
+        return getSharedPreferences(ctx).getString(userName, "")
     }
 }

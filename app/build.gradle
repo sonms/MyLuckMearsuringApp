@@ -23,6 +23,7 @@ android {
 
         buildConfigField "String", "front_ads_id", properties['front_ads_id']
         buildConfigField "String", "banner_ads_id", properties['banner_ads_id']
+        buildConfigField "String", "native_ads_id", properties['native_ads_id']
 
         manifestPlaceholders = [applicationKey: applicationKey]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

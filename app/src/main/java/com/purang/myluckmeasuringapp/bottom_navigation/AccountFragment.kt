@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.app.ActivityCompat.recreate
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.Helper.ThemeHelper
 import com.purang.myluckmeasuringapp.R
 import com.purang.myluckmeasuringapp.databinding.FragmentAccountBinding
@@ -35,7 +36,7 @@ class AccountFragment : Fragment() {
 
     private lateinit var binding : FragmentAccountBinding
     private var preNickName : String? = null
-
+    private var sharedPreferences : SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,15 +48,16 @@ class AccountFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
-        val sharedPref = requireActivity().getSharedPreferences("saveData", Context.MODE_PRIVATE)
-        preNickName = sharedPref.getString("saveNickname", "") ?: ""
+        sharedPreferences = SharedPreferences()
+        //sharedPref.edit().remove("saveNickname").apply()
+        preNickName = sharedPreferences?.getUserName(requireContext()) ?: ""
         //Log.e("prenickname", preNickName.toString())
         if (preNickName != null) {
             binding.accountNickname.text = preNickName
         } else {
-            binding.accountNickname.text = "유저1"
+            binding.accountNickname.text = "user"
         }
 
         binding.accountNickname.setOnClickListener {
@@ -75,10 +77,7 @@ class AccountFragment : Fragment() {
                     val nickname = input.text.toString() // EditText에서 텍스트 가져오기
                     //isFirstAccountEdit = sharedPref.getString("isFirstAccountEdit", "") ?: ""
 
-                    with(sharedPref.edit()) {
-                        putString("saveNickname", nickname)
-                        apply() // 비동기적으로 데이터를 저장
-                    }
+                    sharedPreferences?.setUserName(requireContext(), nickname)
                     binding.accountNickname.text = nickname
                     ad.dismiss()
                 })

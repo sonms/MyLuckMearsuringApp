@@ -6,9 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.purang.myluckmeasuringapp.Helper.SharedPreferences
 import com.purang.myluckmeasuringapp.R
+import com.purang.myluckmeasuringapp.database.ResultDatabase
+import com.purang.myluckmeasuringapp.database.ResultDatabase.Companion.clearAllTables
 import com.purang.myluckmeasuringapp.databinding.FragmentHomeBinding
 import com.purang.myluckmeasuringapp.game_activity.DiceActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,6 +51,17 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireActivity(), DiceActivity::class.java)
             startActivity(intent)
         }
+
+        /*val sharedPreferences = SharedPreferences()
+        sharedPreferences.clear(requireContext())
+        // ResultDatabase 인스턴스 가져오기
+        val db: ResultDatabase? = ResultDatabase.getInstance(requireContext())
+
+        // 백그라운드 스레드에서 clearAllTables() 호출
+        CoroutineScope(Dispatchers.IO).launch {
+            // 데이터베이스 테이블 초기화
+            db?.clearAllTables()
+        }*/
 
         return binding?.root
     }

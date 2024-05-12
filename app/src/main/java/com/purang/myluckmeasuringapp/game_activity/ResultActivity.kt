@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -39,16 +40,17 @@ class ResultActivity : AppCompatActivity() {
 
     private var preGameResult = ""
     private var resultData : GameResultEntity? = null
-    private var sharedPref : SharedPreferences? = null
     private var preNickName : String = ""
     private var gamePercentage = ""
     private var adRequest : AdRequest? = null
+    private var sharedPreferences : com.purang.myluckmeasuringapp.Helper.SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        sharedPref = this.getSharedPreferences("saveData", Context.MODE_PRIVATE)
-        preGameResult = intent.getStringExtra("result") as String
+        sharedPreferences = com.purang.myluckmeasuringapp.Helper.SharedPreferences()
+        //sharedPref.edit().remove("saveNickname").apply()
+        preNickName = sharedPreferences?.getUserName(this@ResultActivity) ?: ""
         gamePercentage = intent.getStringExtra("percentage") as String
         //MobileAds.initialize(this@ResultActivity)
         db = ResultDatabase.getInstance(this@ResultActivity)
@@ -111,8 +113,7 @@ class ResultActivity : AppCompatActivity() {
     private fun initView() {
         //binding.resultLottie.playAnimation()
         //binding.resultLottie.cancelAnimation()
-        val sharedPref = this@ResultActivity.getSharedPreferences("saveData", Context.MODE_PRIVATE)
-        preNickName = sharedPref.getString("saveNickname", "") ?: ""
+        preNickName = sharedPreferences?.getUserName(this@ResultActivity).toString()
         //0 주사위, 1 룰렛, 2 홀짝 3 제비뽑기, 4 강화
         val resultDataSet = preGameResult.split(" ").map { it }
         //Log.e("resultTest", resultDataSet.toString())
@@ -123,10 +124,10 @@ class ResultActivity : AppCompatActivity() {
         val date = mFormat.format(mDate)
 
         resultData = GameResultEntity(
-            userName = if (preNickName == "") {
-                "유저1"
-            } else {
+            userName = if (preNickName != "") {
                 preNickName
+            } else {
+                "유저1"
             },
             gameDice = resultDataSet[0],
             gameRoulette = resultDataSet[1],
